@@ -23,7 +23,7 @@ const STATS = [
 ];
 
 const SERVICE_OPTIONS = [
-  "Microbiological Testing",
+  "Food Testing",
   "Calibration Services",
   "Both Services",
   "Other / Not Sure",
