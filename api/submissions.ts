@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { sql } from "@vercel/postgres";
+import { neon } from "@neondatabase/serverless";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") {
@@ -7,8 +7,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const result = await sql`SELECT * FROM submissions ORDER BY created_at DESC`;
-    return res.status(200).json(result.rows);
+    const sql = neon(process.env.DATABASE_URL!);
+    const rows = await sql`SELECT * FROM submissions ORDER BY created_at DESC`;
+    return res.status(200).json(rows);
   } catch (err) {
     console.error("Fetch error:", err);
     return res.status(500).json({ error: "Failed to fetch submissions" });

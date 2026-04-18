@@ -1,11 +1,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { sql } from "@vercel/postgres";
+import { neon } from "@neondatabase/serverless";
 import { put } from "@vercel/blob";
 
 export const config = {
-  api: {
-    bodyParser: false, // We handle multipart manually
-  },
+  api: { bodyParser: false },
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -14,16 +12,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Parse multipart form data using the Web Streams API
-    const contentType = req.headers["content-type"] || "";
-    if (!contentType.includes("multipart/form-data")) {
-      return res.status(400).json({ error: "Expected multipart/form-data" });
-    }
-
-    // Use formidable for multipart parsing
     const formidable = await import("formidable");
-    const form = formidable.default({ maxFileSize: 10 * 1024 * 1024 }); // 10MB limit
-
+    const form = formidable.default({ maxFileSize: 10 * 1024 * 1024 });
     const [fields, files] = await form.parse(req);
 
     const name = fields.name?.[0];
@@ -40,7 +30,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let invoiceFileName: string | null = null;
     let invoiceFileUrl: string | null = null;
 
-    // Upload invoice to Vercel Blob if provided
     const invoiceFile = files.invoice?.[0];
     if (invoiceFile && invoiceFile.size > 0) {
       const fs = await import("fs");
@@ -57,7 +46,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       invoiceFileUrl = blob.url;
     }
 
-    // Ensure table exists
+    const sql = neon(process.env.DATABASE_URL!);
+
     await sql`
       CREATE TABLE IF NOT EXISTS submissions (
         id SERIAL PRIMARY KEY,
@@ -74,14 +64,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       )
     `;
 
-    // Insert submission
     const result = await sql`
       INSERT INTO submissions (name, email, phone, company, service_type, message, invoice_file_name, invoice_file_url, status)
       VALUES (${name}, ${email}, ${phone}, ${company}, ${serviceType}, ${message}, ${invoiceFileName}, ${invoiceFileUrl}, 'pending')
       RETURNING id
     `;
 
-    return res.status(200).json({ success: true, id: result.rows[0].id });
+    return res.status(200).json({ success: true, id: result[0].id });
   } catch (err) {
     console.error("Submit error:", err);
     return res.status(500).json({ error: "Internal server error" });
