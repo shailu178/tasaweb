@@ -4,28 +4,29 @@ const SERVICES = [
   {
     num: "01",
     title: "Food Testing",
-    desc: "We connect you to certified labs covering chemical, physical, and microbiological parameters — from contamination analysis and pathogen detection to shelf-life studies and full compositional profiling.",
-    tags: ["Chemical Parameters", "Physical Parameters", "Microbiological Parameters", "Shelf-Life Studies"],
+    desc: "Comprehensive food testing delivered through EIAC and ISO certified labs — covering chemical, physical, and microbiological parameters. From nutritional profiling and allergen detection to pathogen screening, contaminant analysis, and shelf-life studies. Every test is conducted under accredited methodology, giving you results you can rely on for compliance and consumer safety.",
+    tags: ["Chemical Analysis", "Microbiological Testing", "Physical Parameters", "Allergen & Shelf-Life"],
   },
   {
     num: "02",
     title: "Calibration Services",
-    desc: "Access accredited calibration providers for laboratory equipment, thermometers, pH meters, balances, and more — all traceable to national standards.",
-    tags: ["Instrument Calibration", "NATA Accredited", "On-Site Available", "Certificates Issued"],
+    desc: "Ensure your laboratory and production equipment operates within certified tolerances. TASA connects you to EIAC accredited calibration providers for thermometers, pH meters, balances, pressure gauges, and more — fully traceable to international standards, with certificates issued and on-site service available.",
+    tags: ["EIAC Accredited", "On-Site Available", "Traceable Certificates", "ISO/IEC 17025"],
   },
 ];
 
 const STATS = [
-  { value: "5–20%", label: "Discount on invoice" },
+  { value: "1", label: "Unified platform" },
   { value: "48h", label: "Avg. turnaround" },
-  { value: "ISO", label: "Compliant testing" },
-  { value: "100%", label: "Trusted results" },
+  { value: "EIAC", label: "& ISO certified labs" },
+  { value: "5–20%", label: "Better value" },
 ];
 
 const SERVICE_OPTIONS = [
   "Food Testing",
   "Calibration Services",
   "Both Services",
+  "Risk Analysis / Consultation",
   "Other / Not Sure",
 ];
 
@@ -109,26 +110,14 @@ export default function Index() {
       >
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {/* TASA Logomark — geometric T with circuit nodes */}
             <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Outer hexagon frame */}
-              <path
-                d="M18 2L32 10V26L18 34L4 26V10L18 2Z"
-                fill="#0F172A"
-                stroke="#10B981"
-                strokeWidth="1.5"
-              />
-              {/* Inner accent line top-left to bottom-right */}
+              <path d="M18 2L32 10V26L18 34L4 26V10L18 2Z" fill="#0F172A" stroke="#10B981" strokeWidth="1.5"/>
               <path d="M10 10L26 26" stroke="rgba(16,185,129,0.2)" strokeWidth="0.8" strokeLinecap="round"/>
-              {/* T crossbar */}
               <path d="M10 13H26" stroke="#10B981" strokeWidth="2.2" strokeLinecap="round"/>
-              {/* T stem */}
               <path d="M18 13V25" stroke="#10B981" strokeWidth="2.2" strokeLinecap="round"/>
-              {/* Corner nodes */}
               <circle cx="10" cy="13" r="1.5" fill="#10B981"/>
               <circle cx="26" cy="13" r="1.5" fill="#10B981"/>
               <circle cx="18" cy="25" r="1.5" fill="#10B981"/>
-              {/* Center micro-dot */}
               <circle cx="18" cy="13" r="0.8" fill="#0F172A"/>
             </svg>
             <div className="flex flex-col leading-tight">
@@ -136,21 +125,21 @@ export default function Index() {
                 TASA
               </span>
               <span style={{ fontFamily: "var(--font-body)", fontSize: "0.58rem" }} className="text-[#10B981] tracking-widest uppercase hidden md:block">
-                Simplifying Testing. Amplifying Safety.
+                Simplifying Testing. Strengthening Safety.
               </span>
             </div>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm text-[#94A3B8]" style={{ fontFamily: "var(--font-body)" }}>
             <a href="#services" className="hover:text-[#10B981] transition-colors">Services</a>
-            <a href="#discount" className="hover:text-[#10B981] transition-colors">Discount</a>
-            <a href="#claim" className="hover:text-[#10B981] transition-colors">Claim</a>
+            <a href="#platform" className="hover:text-[#10B981] transition-colors">Platform</a>
+            <a href="#claim" className="hover:text-[#10B981] transition-colors">Get Started</a>
           </div>
           <button
             onClick={scrollToForm}
             className="btn-primary px-5 py-2 text-sm font-semibold"
             style={{ fontFamily: "var(--font-display)", letterSpacing: "0.1em" }}
           >
-            CLAIM DISCOUNT
+            GET STARTED
           </button>
         </div>
       </nav>
@@ -185,7 +174,7 @@ export default function Index() {
             <div className="inline-flex items-center gap-2 mb-8">
               <div className="w-2 h-2 bg-[#10B981] rounded-full animate-pulse" />
               <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem" }} className="text-[#10B981] tracking-[0.2em] uppercase">
-                Now Offering Exclusive Discounts
+                Testing as a Service — All-in-One Platform
               </span>
             </div>
 
@@ -199,17 +188,20 @@ export default function Index() {
               }}
               className="mb-6"
             >
-              <span className="text-[#F0F5F0]">SIMPLIFYING</span>
+              <span className="text-[#F0F5F0]">ONE PLATFORM.</span>
               <br />
-              <span className="text-[#10B981] glow-text">TESTING.</span>
+              <span className="text-[#10B981] glow-text">ALL YOUR</span>
               <br />
-              <span className="text-[#F0F5F0]">AMPLIFYING</span>
+              <span className="text-[#F0F5F0]">FOOD SAFETY</span>
               <br />
-              <span className="text-[#F0F5F0]">SAFETY.</span>
+              <span className="text-[#F0F5F0]">NEEDS.</span>
             </h1>
 
-            <p className="text-[#94A3B8] text-lg md:text-xl max-w-xl leading-relaxed mb-10">
-              TASA connects your business to <span className="text-[#F0F5F0]">certified labs</span> for microbiological testing and calibration. Submit your invoice and unlock <span className="text-[#10B981] font-semibold">5–20% off</span> your next service.
+            <p className="text-[#94A3B8] text-lg md:text-xl max-w-xl leading-relaxed mb-4">
+              TASA is a <span className="text-[#F0F5F0]">Testing as a Service</span> platform that aggregates <span className="text-[#10B981] font-semibold">EIAC and ISO certified labs</span> under one roof. One point of contact for food testing, calibration, risk analysis, and food safety strengthening — built for food manufacturers, processors, and exporters who need compliance without complexity.
+            </p>
+            <p className="text-[#94A3B8] text-base max-w-xl leading-relaxed mb-10">
+              Single platform. Consolidated reporting. Certified results you can trust.
             </p>
 
             <div className="flex flex-wrap gap-4">
@@ -218,14 +210,14 @@ export default function Index() {
                 className="btn-primary px-8 py-4 text-base"
                 style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem", letterSpacing: "0.12em" }}
               >
-                CLAIM YOUR DISCOUNT →
+                START YOUR REQUEST →
               </button>
               <a
                 href="#services"
                 className="px-8 py-4 text-base border border-[rgba(16,185,129,0.3)] text-[#10B981] hover:border-[#10B981] hover:bg-[rgba(16,185,129,0.05)] transition-all"
                 style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem", letterSpacing: "0.12em" }}
               >
-                OUR SERVICES
+                EXPLORE SERVICES
               </a>
             </div>
           </div>
@@ -258,7 +250,7 @@ export default function Index() {
           <div className="flex items-end justify-between mb-16 flex-wrap gap-4">
             <div>
               <span className="text-[#10B981] text-xs tracking-[0.25em] uppercase" style={{ fontFamily: "var(--font-mono)" }}>
-                What We Connect You To
+                What TASA Covers
               </span>
               <h2
                 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
@@ -268,19 +260,18 @@ export default function Index() {
               </h2>
             </div>
             <div className="text-[#94A3B8] max-w-sm text-sm leading-relaxed">
-              TASA aggregates certified testing and calibration providers so you get the best service, pricing, and turnaround — all in one place.
+              Every service is delivered through EIAC and ISO certified lab partners — one consolidated platform instead of managing multiple vendor relationships.
             </div>
           </div>
 
           {/* Service cards */}
           <div className="space-y-6">
-            {SERVICES.map((s, i) => (
+            {SERVICES.map((s) => (
               <div
                 key={s.num}
-                className={`glow-border card-gradient relative overflow-hidden border border-[rgba(16,185,129,0.12)] p-8 md:p-10 transition-all duration-300 ${s.comingSoon ? "opacity-60" : ""}`}
+                className="glow-border card-gradient relative overflow-hidden border border-[rgba(16,185,129,0.12)] p-8 md:p-10 transition-all duration-300"
                 style={{ background: "#1E293B" }}
               >
-                {/* Large background number */}
                 <span className="number-badge right-6 top-0" style={{ fontSize: "clamp(4rem, 10vw, 8rem)" }}>
                   {s.num}
                 </span>
@@ -291,11 +282,6 @@ export default function Index() {
                       <span className="text-[#10B981] text-xs tracking-[0.2em]" style={{ fontFamily: "var(--font-mono)" }}>
                         {s.num}
                       </span>
-                      {s.comingSoon && (
-                        <span className="text-xs px-2 py-0.5 border border-[rgba(16,185,129,0.4)] text-[#10B981] rounded-sm" style={{ fontFamily: "var(--font-mono)" }}>
-                          COMING SOON
-                        </span>
-                      )}
                     </div>
                     <h3
                       style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.5rem, 3vw, 2.5rem)" }}
@@ -321,17 +307,15 @@ export default function Index() {
                   </div>
                 </div>
 
-                {/* Decorative line */}
-                <div className="absolute left-0 top-0 bottom-0 w-[3px]"
-                  style={{ background: s.comingSoon ? "rgba(16,185,129,0.1)" : "#10B981", opacity: s.comingSoon ? 0.4 : 1 }} />
+                <div className="absolute left-0 top-0 bottom-0 w-[3px]" style={{ background: "#10B981" }} />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* DISCOUNT SECTION */}
-      <section id="discount" className="py-28 relative overflow-hidden">
+      {/* PLATFORM / WHY TASA */}
+      <section id="platform" className="py-28 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: "radial-gradient(ellipse 60% 60% at 50% 50%, rgba(16,185,129,0.07) 0%, transparent 70%)" }}
         />
@@ -341,33 +325,35 @@ export default function Index() {
             {/* Left */}
             <div>
               <span className="text-[#10B981] text-xs tracking-[0.25em] uppercase" style={{ fontFamily: "var(--font-mono)" }}>
-                Exclusive Offer
+                The TASA Advantage
               </span>
               <h2
                 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 5rem)", lineHeight: "0.95" }}
                 className="mt-2 text-[#F0F5F0] mb-6"
               >
-                SAVE UP TO
+                SMARTER TESTING.
                 <br />
-                <span className="text-[#10B981] glow-text" style={{ fontSize: "clamp(4rem, 10vw, 8rem)" }}>20%</span>
+                <span className="text-[#10B981] glow-text">STRONGER SAFETY.</span>
                 <br />
-                ON YOUR INVOICE
+                ONE PLATFORM.
               </h2>
               <p className="text-[#94A3B8] text-base leading-relaxed max-w-md mb-8">
-                Food safety testing shouldn't be a financial burden. Upload your current service invoice and we'll assess your discount — <span className="text-[#F0F5F0]">5% to 20% off</span> based on your order and service type.
+                TASA simplifies how food businesses manage compliance. By aggregating EIAC and ISO certified labs under one platform, we give you faster access, better coordination, and proactive risk insights — so you stay compliant and in control.
               </p>
               <div className="space-y-4">
                 {[
-                  "Upload your existing invoice",
-                  "Fill in your contact details",
-                  "We review and get back to you",
-                  "Receive your discount confirmation",
+                  "Single point of contact — no more managing multiple lab relationships",
+                  "EIAC and ISO certified labs — every test, every time",
+                  "Consolidated certificates and reports in one place",
+                  "48-hour average turnaround on standard tests",
+                  "Risk analysis support to proactively close gaps in your food safety system",
+                  "Better value through platform aggregation — typically 5% to 20%",
                 ].map((step, i) => (
-                  <div key={step} className="flex items-center gap-4">
-                    <div className="w-7 h-7 border border-[#10B981] flex items-center justify-center flex-shrink-0">
+                  <div key={step} className="flex items-start gap-4">
+                    <div className="w-7 h-7 border border-[#10B981] flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-[#10B981] text-xs" style={{ fontFamily: "var(--font-mono)" }}>{i + 1}</span>
                     </div>
-                    <span className="text-[#94A3B8] text-sm">{step}</span>
+                    <span className="text-[#94A3B8] text-sm leading-relaxed">{step}</span>
                   </div>
                 ))}
               </div>
@@ -376,7 +362,7 @@ export default function Index() {
                 className="btn-primary mt-10 px-8 py-4 text-base inline-block"
                 style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem", letterSpacing: "0.12em" }}
               >
-                START YOUR CLAIM →
+                REQUEST A QUOTE →
               </button>
             </div>
 
@@ -387,16 +373,16 @@ export default function Index() {
                 <div className="absolute top-0 right-0 w-32 h-32 rounded-full"
                   style={{ background: "radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)" }} />
                 <div className="text-center relative z-10">
-                  <div style={{ fontFamily: "var(--font-display)", fontSize: "6rem", color: "#10B981", lineHeight: 1 }}
+                  <div style={{ fontFamily: "var(--font-display)", fontSize: "5rem", color: "#10B981", lineHeight: 1 }}
                     className="glow-text">
                     5–20%
                   </div>
                   <div className="text-[#94A3B8] text-sm tracking-widest uppercase mt-2 mb-8" style={{ fontFamily: "var(--font-mono)" }}>
-                    Discount Range
+                    Indicative Platform Value
                   </div>
                   <div className="space-y-3">
                     {[
-                      { service: "Microbiological Testing", discount: "Up to 15%" },
+                      { service: "Food Testing", discount: "Up to 15%" },
                       { service: "Calibration Services", discount: "Up to 20%" },
                       { service: "Combined Services", discount: "Up to 20%" },
                     ].map((item) => (
@@ -409,12 +395,11 @@ export default function Index() {
                     ))}
                   </div>
                   <div className="mt-6 text-xs text-[#94A3B8]" style={{ fontFamily: "var(--font-mono)" }}>
-                    * Discount applied at our discretion based on invoice review
+                    Compared to standard direct-lab pricing. Final pricing confirmed on quote.
                   </div>
                 </div>
               </div>
 
-              {/* Corner accent */}
               <div className="absolute -bottom-4 -right-4 w-20 h-20 border-b-2 border-r-2 border-[#10B981] opacity-30" />
               <div className="absolute -top-4 -left-4 w-20 h-20 border-t-2 border-l-2 border-[#10B981] opacity-30" />
             </div>
@@ -422,7 +407,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* CLAIM FORM */}
+      {/* GET STARTED FORM */}
       <section id="claim" className="py-28 border-t border-[rgba(16,185,129,0.1)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
@@ -433,10 +418,13 @@ export default function Index() {
               style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
               className="mt-2 text-[#F0F5F0]"
             >
-              CLAIM YOUR DISCOUNT
+              REQUEST A QUOTE
             </h2>
             <p className="text-[#94A3B8] mt-4 text-base max-w-lg mx-auto leading-relaxed">
-              Upload your invoice and we'll get back to you within 24 hours with your personalized discount offer.
+              Share your requirements and we'll respond within 24 hours with a tailored proposal — covering certified lab options, turnaround times, and transparent platform pricing.
+            </p>
+            <p className="text-[#94A3B8] mt-2 text-sm max-w-md mx-auto">
+              Already working with a lab? Upload your current invoice and we'll provide a direct comparison.
             </p>
           </div>
 
@@ -450,18 +438,17 @@ export default function Index() {
                   </svg>
                 </div>
                 <h3 style={{ fontFamily: "var(--font-display)", fontSize: "2rem" }} className="text-[#10B981] mb-3">
-                  SUBMISSION RECEIVED
+                  REQUEST RECEIVED
                 </h3>
                 <p className="text-[#94A3B8] text-base leading-relaxed">
-                  Thank you! We've received your details and invoice. Our team will review your submission and contact you within 24 hours with your discount offer.
+                  Thank you. A TASA specialist will review your requirements and contact you within 24 hours with a tailored proposal.
                 </p>
                 <div className="mt-2 text-xs text-[#94A3B8]" style={{ fontFamily: "var(--font-mono)" }}>
-                  ● PENDING REVIEW
+                  ● UNDER REVIEW
                 </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Grid fields */}
                 <div className="grid md:grid-cols-2 gap-6">
                   {[
                     { label: "Full Name", name: "name", placeholder: "John Doe", type: "text", required: true },
@@ -487,10 +474,9 @@ export default function Index() {
                   ))}
                 </div>
 
-                {/* Service type */}
                 <div>
                   <label className="block text-xs tracking-widest uppercase text-[#94A3B8] mb-2" style={{ fontFamily: "var(--font-mono)" }}>
-                    Service Type <span className="text-[#10B981]">*</span>
+                    Service Required <span className="text-[#10B981]">*</span>
                   </label>
                   <select
                     name="serviceType"
@@ -507,10 +493,9 @@ export default function Index() {
                   </select>
                 </div>
 
-                {/* Invoice upload */}
                 <div>
                   <label className="block text-xs tracking-widest uppercase text-[#94A3B8] mb-2" style={{ fontFamily: "var(--font-mono)" }}>
-                    Upload Invoice <span className="text-[rgba(16,185,129,0.5)]">(Optional but recommended)</span>
+                    Upload Existing Invoice <span className="text-[rgba(16,185,129,0.5)]">(Optional — enables direct comparison)</span>
                   </label>
                   <div
                     className={`upload-zone p-8 text-center cursor-pointer ${dragOver ? "drag-over" : ""}`}
@@ -566,14 +551,13 @@ export default function Index() {
                   </div>
                 </div>
 
-                {/* Message */}
                 <div>
                   <label className="block text-xs tracking-widest uppercase text-[#94A3B8] mb-2" style={{ fontFamily: "var(--font-mono)" }}>
-                    Additional Notes <span className="text-[rgba(16,185,129,0.5)]">(Optional)</span>
+                    Tell Us About Your Requirements <span className="text-[rgba(16,185,129,0.5)]">(Optional)</span>
                   </label>
                   <textarea
                     name="message"
-                    placeholder="Tell us anything relevant about your requirements or current services..."
+                    placeholder="Describe your products, testing scope, volumes, or any specific compliance or certification requirements..."
                     value={formData.message}
                     onChange={handleInput}
                     rows={4}
@@ -594,11 +578,11 @@ export default function Index() {
                   className="btn-primary w-full py-5 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ fontFamily: "var(--font-display)", fontSize: "1.2rem", letterSpacing: "0.15em" }}
                 >
-                  {submitting ? "SUBMITTING..." : "SUBMIT & CLAIM DISCOUNT →"}
+                  {submitting ? "SENDING..." : "SUBMIT REQUEST →"}
                 </button>
 
                 <p className="text-center text-[#475569] text-xs" style={{ fontFamily: "var(--font-mono)" }}>
-                  Your data is secure. We never share your information with third parties.
+                  We respond within 24 hours. Your information is kept strictly confidential.
                 </p>
               </form>
             )}
@@ -623,14 +607,27 @@ export default function Index() {
                 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 5vw, 4rem)" }}
                 className="mt-2 text-[#F0F5F0] mb-6"
               >
-                YOUR SAFETY, OUR MISSION
+                YOUR ALL-IN-ONE FOOD SAFETY PLATFORM
               </h2>
               <p className="text-[#94A3B8] text-base leading-relaxed mb-4">
-                TASA is an aggregator platform that connects businesses to certified food safety testing labs and calibration providers. We cut through the complexity of sourcing compliant services — so you can focus on what matters.
+                TASA — <span className="text-[#F0F5F0]">Testing as a Service</span> — is an all-in-one platform built for food manufacturers, processors, and exporters who need a smarter way to manage compliance. We aggregate a vetted network of <span className="text-[#10B981]">EIAC and ISO certified labs</span> under a single platform — eliminating fragmented vendor management and replacing it with one streamlined experience.
               </p>
-              <p className="text-[#94A3B8] text-base leading-relaxed">
-                Whether you need microbiological analysis, precision instrument calibration, or expert consultation — TASA is building the most comprehensive food safety services network in the region, with more providers and services added continuously.
+              <p className="text-[#94A3B8] text-base leading-relaxed mb-6">
+                Beyond testing and calibration, TASA provides risk analysis and food safety advisory support to help you identify and close gaps before they become compliance failures or product recalls. We are built to be your long-term food safety partner — not just a test-booking service.
               </p>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  "EIAC & ISO certified lab partners only",
+                  "Consolidated compliance reporting",
+                  "Risk analysis & food safety advisory",
+                  "Single invoice, multiple services",
+                ].map((point) => (
+                  <div key={point} className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-[#10B981] rounded-full mt-2 flex-shrink-0" />
+                    <span className="text-[#94A3B8] text-sm leading-relaxed">{point}</span>
+                  </div>
+                ))}
+              </div>
             </div>
             <div className="glow-border border border-[rgba(16,185,129,0.12)] p-8 text-center"
               style={{ background: "#1E293B" }}>
@@ -649,7 +646,7 @@ export default function Index() {
               </div>
               <div className="section-divider my-4" />
               <p className="text-[#94A3B8] text-sm leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
-                Simplifying Testing.<br />Amplifying Safety.<br />Every test. Every result.
+                EIAC & ISO Certified Labs.<br />One Platform. Full Compliance.<br />Stronger Food Safety.
               </p>
             </div>
           </div>
@@ -675,12 +672,12 @@ export default function Index() {
             </span>
           </div>
           <p className="text-[#475569] text-xs" style={{ fontFamily: "var(--font-mono)" }}>
-            © {new Date().getFullYear()} TASA. All rights reserved. | Simplifying Testing. Amplifying Safety.
+            © {new Date().getFullYear()} TASA. All rights reserved. | Testing as a Service — EIAC & ISO Certified Labs
           </p>
           <div className="flex gap-6 text-xs text-[#475569]" style={{ fontFamily: "var(--font-mono)" }}>
             <a href="#services" className="hover:text-[#10B981] transition-colors">Services</a>
-            <a href="#discount" className="hover:text-[#10B981] transition-colors">Discount</a>
-            <a href="#claim" className="hover:text-[#10B981] transition-colors">Claim</a>
+            <a href="#platform" className="hover:text-[#10B981] transition-colors">Platform</a>
+            <a href="#claim" className="hover:text-[#10B981] transition-colors">Get Started</a>
           </div>
         </div>
       </footer>
