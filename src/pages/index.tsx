@@ -473,7 +473,7 @@ export default function Index() {
               MANAGE EVERYTHING<br />IN ONE DASHBOARD
             </h2>
             <p className="text-[#94A3B8] mt-4 text-base max-w-xl mx-auto leading-relaxed">
-              Your TASA dashboard gives you a live, centralised view of every sample, order, certificate, and risk insight — from submission to final result, all in one place.
+              Your TASA dashboard gives you complete visibility and control — from sample submission to final results and compliance, all in one place.
             </p>
           </div>
 
@@ -489,7 +489,17 @@ export default function Index() {
                   </svg>
                 ),
                 title: "Sample Tracking",
-                desc: "Track every sample from submission to lab receipt to final result. Know exactly where each test stands in real time.",
+                desc: "Real-time visibility from submission to final result.",
+                visual: (
+                  <div className="mt-4 flex items-center gap-1 text-xs" style={{ fontFamily: "var(--font-mono)" }}>
+                    {["Submitted", "In Lab", "Results Ready"].map((s, i) => (
+                      <div key={s} className="flex items-center gap-1">
+                        <div className="px-2 py-1 rounded-full border" style={{ borderColor: i === 1 ? "#10B981" : "rgba(16,185,129,0.3)", color: i === 1 ? "#10B981" : "#64748B", background: i === 1 ? "rgba(16,185,129,0.08)" : "transparent" }}>{s}</div>
+                        {i < 2 && <span style={{ color: "#10B981" }}>→</span>}
+                      </div>
+                    ))}
+                  </div>
+                ),
               },
               {
                 icon: (
@@ -499,7 +509,17 @@ export default function Index() {
                   </svg>
                 ),
                 title: "Order Status",
-                desc: "View live status updates across all active orders — pending, in-progress, or completed — with estimated turnaround times.",
+                desc: "Live updates with estimated completion times.",
+                visual: (
+                  <div className="mt-4 flex gap-2 text-xs" style={{ fontFamily: "var(--font-mono)" }}>
+                    {[{ label: "Pending", color: "#64748B" }, { label: "In Progress", color: "#F59E0B" }, { label: "Completed", color: "#10B981" }].map((s) => (
+                      <div key={s.label} className="flex items-center gap-1">
+                        <div className="w-2 h-2 rounded-full" style={{ background: s.color }} />
+                        <span style={{ color: s.color }}>{s.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                ),
               },
               {
                 icon: (
@@ -510,7 +530,16 @@ export default function Index() {
                   </svg>
                 ),
                 title: "Results & Reports",
-                desc: "Access, review, and download all test certificates and calibration reports in one organised library. Ready to share with auditors on demand.",
+                desc: "Instant access to certificates and audit-ready reports.",
+                visual: (
+                  <div className="mt-4 flex gap-2">
+                    {["Certificate.pdf", "Report.pdf"].map((f) => (
+                      <div key={f} className="flex items-center gap-1 border border-[rgba(16,185,129,0.2)] px-2 py-1 rounded text-xs" style={{ color: "#10B981", fontFamily: "var(--font-mono)" }}>
+                        <span>↓</span><span>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                ),
               },
               {
                 icon: (
@@ -520,7 +549,16 @@ export default function Index() {
                   </svg>
                 ),
                 title: "Risk Insights",
-                desc: "Receive automated risk flags and advisory notes based on your test history — so you can act on food safety gaps before they escalate.",
+                desc: "Smart alerts to catch issues before they escalate.",
+                visual: (
+                  <div className="mt-4 flex gap-2 text-xs" style={{ fontFamily: "var(--font-mono)" }}>
+                    {[{ label: "Low", color: "#10B981" }, { label: "Medium", color: "#F59E0B" }, { label: "High", color: "#EF4444" }].map((r) => (
+                      <div key={r.label} className="flex items-center gap-1 px-2 py-1 rounded border" style={{ borderColor: r.color + "55", color: r.color, background: r.color + "11" }}>
+                        <span>⚑</span><span>{r.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                ),
               },
               {
                 icon: (
@@ -531,7 +569,14 @@ export default function Index() {
                   </svg>
                 ),
                 title: "Multi-Order Management",
-                desc: "Manage testing across multiple products, production lines, or facilities — all from a single account with full visibility and control.",
+                desc: "Control all products and facilities in one place.",
+                visual: (
+                  <div className="mt-4 flex gap-2">
+                    {["Product A", "Product B", "Facility 1"].map((p) => (
+                      <div key={p} className="border border-[rgba(16,185,129,0.2)] px-2 py-1 rounded text-xs" style={{ color: "#94A3B8", fontFamily: "var(--font-mono)" }}>{p}</div>
+                    ))}
+                  </div>
+                ),
               },
               {
                 icon: (
@@ -541,9 +586,18 @@ export default function Index() {
                   </svg>
                 ),
                 title: "Compliance Overview",
-                desc: "A live compliance score across all your active tests and calibration schedules — so you always know where you stand.",
+                desc: "Live compliance score — always audit-ready.",
+                visual: (
+                  <div className="mt-4 flex items-center gap-3">
+                    <div className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)", color: "#10B981" }}>98%</div>
+                    <div className="flex-1 h-2 rounded-full bg-[rgba(16,185,129,0.1)] overflow-hidden">
+                      <div className="h-full rounded-full" style={{ width: "98%", background: "linear-gradient(90deg, #10B981, #34D399)" }} />
+                    </div>
+                    <div className="text-xs border border-[rgba(16,185,129,0.3)] px-2 py-1 rounded-full" style={{ color: "#10B981", fontFamily: "var(--font-mono)" }}>Audit-Ready</div>
+                  </div>
+                ),
               },
-            ].map((feature) => (
+            ].map((feature: { icon: React.ReactNode; title: string; desc: string; visual?: React.ReactNode }) => (
               <div key={feature.title}
                 className="glow-border border border-[rgba(16,185,129,0.12)] p-6 relative"
                 style={{ background: "#1E293B" }}>
@@ -555,6 +609,7 @@ export default function Index() {
                   {feature.title}
                 </h3>
                 <p className="text-[#94A3B8] text-sm leading-relaxed">{feature.desc}</p>
+                {feature.visual && feature.visual}
               </div>
             ))}
           </div>
