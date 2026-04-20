@@ -30,6 +30,37 @@ const SERVICE_OPTIONS = [
   "Other / Not Sure",
 ];
 
+const FAQS = [
+  {
+    q: "What types of food testing does TASA cover?",
+    a: "TASA covers the full scope of food safety testing — chemical analysis, microbiological testing, allergen detection, nutritional profiling, pathogen screening, contaminant analysis, and shelf-life studies. All tests are conducted through EIAC and ISO certified labs.",
+  },
+  {
+    q: "How does sample collection work?",
+    a: "Once you book a test through TASA, a certified lab is assigned based on your test parameters, location, and turnaround requirements. The lab coordinates sample pickup directly — you don't need to manage logistics.",
+  },
+  {
+    q: "Where are my reports and certificates stored?",
+    a: "All test results, certificates, and calibration reports are uploaded directly to your TASA portal. They're organised, downloadable, and ready to share with auditors or regulators on demand.",
+  },
+  {
+    q: "How long does testing take?",
+    a: "Standard turnaround is 48 hours for most tests. Complex or specialised tests may take longer — exact timelines are confirmed when your order is assigned to a lab.",
+  },
+  {
+    q: "Is TASA only for large food manufacturers?",
+    a: "Not at all. TASA is built for food manufacturers, processors, and exporters of all sizes. Whether you're running a single production line or managing multiple facilities, the platform scales to your needs.",
+  },
+  {
+    q: "Can I compare TASA pricing against my current lab?",
+    a: "Yes. Upload your existing lab invoice during your request and we'll provide a direct like-for-like comparison — with EIAC/ISO certified alternatives and transparent platform pricing.",
+  },
+  {
+    q: "What makes TASA different from going directly to a lab?",
+    a: "TASA gives you access to multiple certified labs through one platform, consolidated reporting, risk analysis, and a single point of contact. You get better pricing through platform aggregation, zero vendor management overhead, and proactive compliance insights — not just test results.",
+  },
+];
+
 export default function Index() {
   const [formData, setFormData] = useState({
     name: "",
@@ -45,6 +76,7 @@ export default function Index() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [navScrolled, setNavScrolled] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -78,15 +110,12 @@ export default function Index() {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
-
     try {
       const fd = new FormData();
       Object.entries(formData).forEach(([k, v]) => fd.append(k, v));
       if (invoiceFile) fd.append("invoice", invoiceFile);
-
       const res = await fetch("/api/submit", { method: "POST", body: fd });
       const data = await res.json();
-
       if (!res.ok || !data.success) throw new Error(data.error || "Submission failed");
       setSubmitted(true);
     } catch (err: any) {
@@ -99,7 +128,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-[#0F172A] text-[#F0F5F0] overflow-x-hidden">
 
-      {/* NAV */}
+      {/* ── NAV ── */}
       <nav
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
@@ -110,7 +139,7 @@ export default function Index() {
       >
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
               <path d="M18 2L32 10V26L18 34L4 26V10L18 2Z" fill="#0F172A" stroke="#10B981" strokeWidth="1.5"/>
               <path d="M10 10L26 26" stroke="rgba(16,185,129,0.2)" strokeWidth="0.8" strokeLinecap="round"/>
               <path d="M10 13H26" stroke="#10B981" strokeWidth="2.2" strokeLinecap="round"/>
@@ -121,90 +150,59 @@ export default function Index() {
               <circle cx="18" cy="13" r="0.8" fill="#0F172A"/>
             </svg>
             <div className="flex flex-col leading-tight">
-              <span style={{ fontFamily: "var(--font-display)" }} className="text-xl tracking-widest text-[#F0F5F0]">
-                TASA
-              </span>
+              <span style={{ fontFamily: "var(--font-display)" }} className="text-xl tracking-widest text-[#F0F5F0]">TASA</span>
               <span style={{ fontFamily: "var(--font-body)", fontSize: "0.58rem" }} className="text-[#10B981] tracking-widest uppercase hidden md:block">
                 Simplifying Testing. Strengthening Safety.
               </span>
             </div>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm text-[#94A3B8]" style={{ fontFamily: "var(--font-body)" }}>
-            <a href="#services" className="hover:text-[#10B981] transition-colors">Services</a>
-            <a href="#platform" className="hover:text-[#10B981] transition-colors">Platform</a>
-            <a href="#dashboard" className="hover:text-[#10B981] transition-colors">Dashboard</a>
-            <a href="#claim" className="hover:text-[#10B981] transition-colors">Get Started</a>
+            <a href="#what-we-do" className="hover:text-[#10B981] transition-colors">What We Do</a>
+            <a href="#how-it-works" className="hover:text-[#10B981] transition-colors">How It Works</a>
+            <a href="#platform" className="hover:text-[#10B981] transition-colors">TASA Advantage</a>
           </div>
           <button
             onClick={scrollToForm}
             className="btn-primary px-5 py-2 text-sm font-semibold"
             style={{ fontFamily: "var(--font-display)", letterSpacing: "0.1em" }}
           >
-            GET STARTED
+            JOIN TODAY
           </button>
         </div>
       </nav>
 
-      {/* HERO */}
+      {/* ── HERO ── */}
       <section className="relative min-h-screen flex flex-col justify-center overflow-hidden">
         <div className="hero-gradient absolute inset-0 pointer-events-none" />
-
-        {/* BG grid */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
           style={{
             backgroundImage: "linear-gradient(rgba(16,185,129,1) 1px, transparent 1px), linear-gradient(90deg, rgba(16,185,129,1) 1px, transparent 1px)",
-            backgroundSize: "60px 60px"
+            backgroundSize: "60px 60px",
           }}
         />
-
-        {/* Large background text */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none"
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(6rem, 18vw, 22rem)",
-            color: "rgba(16,185,129,0.03)",
-            letterSpacing: "0.05em",
-            whiteSpace: "nowrap",
-          }}>
+          style={{ fontFamily: "var(--font-display)", fontSize: "clamp(6rem, 18vw, 22rem)", color: "rgba(16,185,129,0.03)", letterSpacing: "0.05em", whiteSpace: "nowrap" }}>
           TASA
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-20">
           <div className="max-w-4xl">
-            {/* Tag */}
-            <div className="inline-flex items-center gap-2 mb-8">
-              <div className="w-2 h-2 bg-[#10B981] rounded-full animate-pulse" />
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem" }} className="text-[#10B981] tracking-[0.2em] uppercase">
-                Testing as a Service
-              </span>
-            </div>
 
-            {/* Headline */}
             <h1
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(3.5rem, 9vw, 9rem)",
-                lineHeight: "0.95",
-                letterSpacing: "0.02em",
-              }}
+              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(3.5rem, 9vw, 9rem)", lineHeight: "0.95", letterSpacing: "0.02em" }}
               className="mb-6"
             >
-              <span className="text-[#F0F5F0]">ONE PLATFORM.</span>
-              <br />
-              <span className="text-[#10B981] glow-text">ALL YOUR</span>
-              <br />
-              <span className="text-[#F0F5F0]">FOOD SAFETY</span>
-              <br />
+              <span className="text-[#F0F5F0]">ONE PLATFORM.</span><br />
+              <span className="text-[#10B981] glow-text">ALL YOUR</span><br />
+              <span className="text-[#F0F5F0]">FOOD SAFETY</span><br />
               <span className="text-[#F0F5F0]">NEEDS.</span>
             </h1>
-
             <p className="text-[#94A3B8] text-lg md:text-xl max-w-xl leading-relaxed mb-4">
               TASA aggregates <span className="text-[#10B981] font-semibold">EIAC and ISO certified labs</span> into one <span className="text-[#F0F5F0]">Testing as a Service</span> platform. Manage food testing, calibration, risk analysis, and food safety in one place — with a single point of contact, consolidated reporting, and proactive insights that keep your business ahead of compliance.
             </p>
             <p className="text-[#94A3B8] text-base max-w-xl leading-relaxed mb-10">
               Built for food manufacturers, processors, and exporters who demand reliability.
             </p>
-
             <div className="flex flex-wrap gap-4">
               <button
                 onClick={scrollToForm}
@@ -214,7 +212,7 @@ export default function Index() {
                 START YOUR REQUEST →
               </button>
               <a
-                href="#services"
+                href="#what-we-do"
                 className="px-8 py-4 text-base border border-[rgba(16,185,129,0.3)] text-[#10B981] hover:border-[#10B981] hover:bg-[rgba(16,185,129,0.05)] transition-all"
                 style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem", letterSpacing: "0.12em" }}
               >
@@ -224,40 +222,28 @@ export default function Index() {
           </div>
         </div>
 
-        {/* STATS bar */}
         <div className="relative z-10 border-t border-b border-[rgba(16,185,129,0.1)] bg-[#1E293B]">
           <div className="max-w-7xl mx-auto px-6 py-6 grid grid-cols-2 md:grid-cols-4 gap-6">
             {STATS.map((s) => (
               <div key={s.label} className="text-center">
-                <div
-                  style={{ fontFamily: "var(--font-display)", fontSize: "2.2rem", color: "#10B981" }}
-                  className="leading-none mb-1"
-                >
-                  {s.value}
-                </div>
-                <div className="text-[#94A3B8] text-xs tracking-widest uppercase" style={{ fontFamily: "var(--font-mono)" }}>
-                  {s.label}
-                </div>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: "2.2rem", color: "#10B981" }} className="leading-none mb-1">{s.value}</div>
+                <div className="text-[#94A3B8] text-xs tracking-widest uppercase" style={{ fontFamily: "var(--font-mono)" }}>{s.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SERVICES */}
-      <section id="services" className="py-28 relative">
+      {/* ── WHAT WE DO ── */}
+      <section id="what-we-do" className="py-28 relative">
         <div className="max-w-7xl mx-auto px-6">
-          {/* Header */}
           <div className="flex items-end justify-between mb-16 flex-wrap gap-4">
             <div>
               <span className="text-[#10B981] text-xs tracking-[0.25em] uppercase" style={{ fontFamily: "var(--font-mono)" }}>
-                What TASA Covers
+                Our Services
               </span>
-              <h2
-                style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
-                className="mt-2 text-[#F0F5F0]"
-              >
-                OUR SERVICES
+              <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 5rem)" }} className="mt-2 text-[#F0F5F0]">
+                WHAT WE DO
               </h2>
             </div>
             <div className="text-[#94A3B8] max-w-sm text-sm leading-relaxed">
@@ -265,7 +251,6 @@ export default function Index() {
             </div>
           </div>
 
-          {/* Service cards */}
           <div className="space-y-6">
             {SERVICES.map((s) => (
               <div
@@ -273,41 +258,21 @@ export default function Index() {
                 className="glow-border card-gradient relative overflow-hidden border border-[rgba(16,185,129,0.12)] p-8 md:p-10 transition-all duration-300"
                 style={{ background: "#1E293B" }}
               >
-                <span className="number-badge right-6 top-0" style={{ fontSize: "clamp(4rem, 10vw, 8rem)" }}>
-                  {s.num}
-                </span>
-
+                <span className="number-badge right-6 top-0" style={{ fontSize: "clamp(4rem, 10vw, 8rem)" }}>{s.num}</span>
                 <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-6">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
-                      <span className="text-[#10B981] text-xs tracking-[0.2em]" style={{ fontFamily: "var(--font-mono)" }}>
-                        {s.num}
-                      </span>
+                      <span className="text-[#10B981] text-xs tracking-[0.2em]" style={{ fontFamily: "var(--font-mono)" }}>{s.num}</span>
                     </div>
-                    <h3
-                      style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.5rem, 3vw, 2.5rem)" }}
-                      className="text-[#F0F5F0] mb-3"
-                    >
-                      {s.title}
-                    </h3>
-                    <p className="text-[#94A3B8] text-base leading-relaxed max-w-lg">
-                      {s.desc}
-                    </p>
+                    <h3 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.5rem, 3vw, 2.5rem)" }} className="text-[#F0F5F0] mb-3">{s.title}</h3>
+                    <p className="text-[#94A3B8] text-base leading-relaxed max-w-lg">{s.desc}</p>
                   </div>
-
                   <div className="flex flex-wrap gap-2 md:max-w-xs">
                     {s.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs px-3 py-1 border border-[rgba(16,185,129,0.2)] text-[#94A3B8] rounded-sm"
-                        style={{ fontFamily: "var(--font-mono)" }}
-                      >
-                        {tag}
-                      </span>
+                      <span key={tag} className="text-xs px-3 py-1 border border-[rgba(16,185,129,0.2)] text-[#94A3B8] rounded-sm" style={{ fontFamily: "var(--font-mono)" }}>{tag}</span>
                     ))}
                   </div>
                 </div>
-
                 <div className="absolute left-0 top-0 bottom-0 w-[3px]" style={{ background: "#10B981" }} />
               </div>
             ))}
@@ -315,15 +280,112 @@ export default function Index() {
         </div>
       </section>
 
-      {/* PLATFORM / WHY TASA */}
-      <section id="platform" className="py-28 relative overflow-hidden">
+      {/* ── HOW IT WORKS ── */}
+      <section id="how-it-works" className="py-28 border-t border-[rgba(16,185,129,0.1)] relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse 60% 60% at 50% 50%, rgba(16,185,129,0.07) 0%, transparent 70%)" }}
-        />
+          style={{ background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(16,185,129,0.04) 0%, transparent 70%)" }} />
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            {/* Left */}
+
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 5rem)" }} className="text-[#F0F5F0]">
+              HOW IT WORKS
+            </h2>
+            <p className="text-[#64748B] mt-3 text-base max-w-md mx-auto">
+              Three steps. No calls, no chasing, no complexity.
+            </p>
+          </div>
+
+          {/* Step cards */}
+          <div className="grid md:grid-cols-3 gap-6">
+
+            {/* Step 1 */}
+            <div className="flex flex-col rounded-2xl overflow-hidden border border-[rgba(16,185,129,0.12)]" style={{ background: "#1E293B" }}>
+              {/* Visual area */}
+              <div className="relative w-full overflow-hidden" style={{ height: "220px" }}>
+                <img src="/lab-step1.jpg" alt="Book your test" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(15,23,42,0.15) 0%, rgba(15,23,42,0.65) 100%)" }} />
+                {/* Step badge */}
+                <div className="absolute top-5 left-5 text-xs font-medium tracking-widest text-[#10B981] border border-[rgba(16,185,129,0.25)] px-3 py-1 rounded-full" style={{ fontFamily: "var(--font-mono)", background: "rgba(15,23,42,0.7)" }}>
+                  STEP 1
+                </div>
+              </div>
+              {/* Text */}
+              <div className="p-8 flex flex-col gap-2">
+                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.6rem", letterSpacing: "0.04em" }} className="text-[#F0F5F0]">
+                  Book Your Test
+                </h3>
+                <p className="text-[#64748B] text-sm leading-relaxed">
+                  Upload product details & submit. We handle the rest.
+                </p>
+              </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="flex flex-col rounded-2xl overflow-hidden border border-[rgba(16,185,129,0.12)]" style={{ background: "#1E293B" }}>
+              <div className="relative w-full overflow-hidden" style={{ height: "220px" }}>
+                <img src="/lab-step2.jpg" alt="Sample collected" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(15,23,42,0.15) 0%, rgba(15,23,42,0.65) 100%)" }} />
+                <div className="absolute top-5 left-5 text-xs font-medium tracking-widest text-[#10B981] border border-[rgba(16,185,129,0.25)] px-3 py-1 rounded-full" style={{ fontFamily: "var(--font-mono)", background: "rgba(15,23,42,0.7)" }}>
+                  STEP 2
+                </div>
+              </div>
+              <div className="p-8 flex flex-col gap-2">
+                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.6rem", letterSpacing: "0.04em" }} className="text-[#F0F5F0]">
+                  Lab Assigned & Sample Collected
+                </h3>
+                <p className="text-[#64748B] text-sm leading-relaxed">
+                  Certified lab automatically assigned. Sample collected at your door.
+                </p>
+              </div>
+            </div>
+
+            {/* Step 3 */}
+            <div className="flex flex-col rounded-2xl overflow-hidden border border-[rgba(16,185,129,0.12)]" style={{ background: "#1E293B" }}>
+              <div className="relative w-full overflow-hidden" style={{ height: "220px" }}>
+                <img src="/lab-step3.jpg" alt="Reports on portal" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(15,23,42,0.15) 0%, rgba(15,23,42,0.65) 100%)" }} />
+                <div className="absolute top-5 left-5 text-xs font-medium tracking-widest text-[#10B981] border border-[rgba(16,185,129,0.25)] px-3 py-1 rounded-full" style={{ fontFamily: "var(--font-mono)", background: "rgba(15,23,42,0.7)" }}>
+                  STEP 3
+                </div>
+              </div>
+              <div className="p-8 flex flex-col gap-2">
+                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.6rem", letterSpacing: "0.04em" }} className="text-[#F0F5F0]">
+                  Reports on Your Portal
+                </h3>
+                <p className="text-[#64748B] text-sm leading-relaxed">
+                  Instant access to results, certificates & insights. Always audit-ready.
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          {/* CTA */}
+          <div className="mt-12 text-center">
+            <button
+              onClick={scrollToForm}
+              className="btn-primary px-10 py-4 text-base inline-block"
+              style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem", letterSpacing: "0.12em" }}
+            >
+              START YOUR FIRST TEST →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── PLATFORM (merged Platform + Dashboard) ── */}
+      <section id="platform" className="py-28 border-t border-[rgba(16,185,129,0.1)] relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse 60% 60% at 50% 50%, rgba(16,185,129,0.07) 0%, transparent 70%)" }} />
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          style={{ backgroundImage: "repeating-linear-gradient(0deg, #10B981 0px, #10B981 1px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, #10B981 0px, #10B981 1px, transparent 1px, transparent 40px)" }} />
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+
+          {/* Top: Why TASA */}
+          <div className="grid md:grid-cols-2 gap-16 items-center mb-28">
             <div>
               <span className="text-[#10B981] text-xs tracking-[0.25em] uppercase" style={{ fontFamily: "var(--font-mono)" }}>
                 The TASA Advantage
@@ -332,10 +394,8 @@ export default function Index() {
                 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 5rem)", lineHeight: "0.95" }}
                 className="mt-2 text-[#F0F5F0] mb-6"
               >
-                ONE PLATFORM.
-                <br />
-                <span className="text-[#10B981] glow-text">TOTAL CONTROL.</span>
-                <br />
+                ONE PLATFORM.<br />
+                <span className="text-[#10B981] glow-text">TOTAL CONTROL.</span><br />
                 ZERO GAPS.
               </h2>
               <p className="text-[#94A3B8] text-base leading-relaxed max-w-md mb-8">
@@ -363,19 +423,17 @@ export default function Index() {
                 className="btn-primary mt-10 px-8 py-4 text-base inline-block"
                 style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem", letterSpacing: "0.12em" }}
               >
-                REQUEST A QUOTE →
+                JOIN TODAY →
               </button>
             </div>
 
-            {/* Right — visual */}
             <div className="relative">
               <div className="glow-border border border-[rgba(16,185,129,0.15)] p-10 relative overflow-hidden animate-float"
                 style={{ background: "linear-gradient(135deg, #1E293B, #0F172A)" }}>
                 <div className="absolute top-0 right-0 w-32 h-32 rounded-full"
                   style={{ background: "radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)" }} />
                 <div className="text-center relative z-10">
-                  <div style={{ fontFamily: "var(--font-display)", fontSize: "5rem", color: "#10B981", lineHeight: 1 }}
-                    className="glow-text">
+                  <div style={{ fontFamily: "var(--font-display)", fontSize: "5rem", color: "#10B981", lineHeight: 1 }} className="glow-text">
                     5–20%
                   </div>
                   <div className="text-[#94A3B8] text-sm tracking-widest uppercase mt-2 mb-8" style={{ fontFamily: "var(--font-mono)" }}>
@@ -389,9 +447,7 @@ export default function Index() {
                     ].map((item) => (
                       <div key={item.service} className="flex items-center justify-between py-3 border-b border-[rgba(16,185,129,0.1)]">
                         <span className="text-[#94A3B8] text-sm">{item.service}</span>
-                        <span className="text-[#10B981] text-sm font-semibold" style={{ fontFamily: "var(--font-mono)" }}>
-                          {item.discount}
-                        </span>
+                        <span className="text-[#10B981] text-sm font-semibold" style={{ fontFamily: "var(--font-mono)" }}>{item.discount}</span>
                       </div>
                     ))}
                   </div>
@@ -400,27 +456,20 @@ export default function Index() {
                   </div>
                 </div>
               </div>
-
               <div className="absolute -bottom-4 -right-4 w-20 h-20 border-b-2 border-r-2 border-[#10B981] opacity-30" />
               <div className="absolute -top-4 -left-4 w-20 h-20 border-t-2 border-l-2 border-[#10B981] opacity-30" />
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* DASHBOARD SECTION */}
-      <section id="dashboard" className="py-28 border-t border-[rgba(16,185,129,0.1)] relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
-          style={{ backgroundImage: "repeating-linear-gradient(0deg, #10B981 0px, #10B981 1px, transparent 1px, transparent 40px), repeating-linear-gradient(90deg, #10B981 0px, #10B981 1px, transparent 1px, transparent 40px)" }} />
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          {/* Divider */}
+          <div className="section-divider mb-28" />
+
+          {/* Bottom: Dashboard */}
           <div className="text-center mb-16">
             <span className="text-[#10B981] text-xs tracking-[0.25em] uppercase" style={{ fontFamily: "var(--font-mono)" }}>
-              Coming Soon
+              Your Control Centre
             </span>
-            <h2
-              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
-              className="mt-2 text-[#F0F5F0]"
-            >
+            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 5rem)" }} className="mt-2 text-[#F0F5F0]">
               MANAGE EVERYTHING<br />IN ONE DASHBOARD
             </h2>
             <p className="text-[#94A3B8] mt-4 text-base max-w-xl mx-auto leading-relaxed">
@@ -428,7 +477,6 @@ export default function Index() {
             </p>
           </div>
 
-          {/* Feature cards */}
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {[
               {
@@ -503,45 +551,27 @@ export default function Index() {
                 <div className="w-10 h-10 border border-[rgba(16,185,129,0.3)] flex items-center justify-center mb-4">
                   {feature.icon}
                 </div>
-                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem", letterSpacing: "0.05em" }}
-                  className="text-[#F0F5F0] mb-2">{feature.title}</h3>
+                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.1rem", letterSpacing: "0.05em" }} className="text-[#F0F5F0] mb-2">
+                  {feature.title}
+                </h3>
                 <p className="text-[#94A3B8] text-sm leading-relaxed">{feature.desc}</p>
               </div>
             ))}
           </div>
 
-          {/* Preview bar */}
-          <div className="border border-[rgba(16,185,129,0.15)] px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-4"
-            style={{ background: "linear-gradient(135deg, rgba(16,185,129,0.05), rgba(16,185,129,0.02))" }}>
-            <div className="flex items-center gap-3">
-              <div className="w-2 h-2 bg-[#10B981] rounded-full animate-pulse" />
-              <span className="text-[#94A3B8] text-sm" style={{ fontFamily: "var(--font-mono)" }}>
-                DASHBOARD IN DEVELOPMENT — Available to all TASA clients at launch
-              </span>
-            </div>
-            <button
-              onClick={scrollToForm}
-              className="text-[#10B981] text-sm border border-[rgba(16,185,129,0.3)] px-5 py-2 hover:border-[#10B981] hover:bg-[rgba(16,185,129,0.05)] transition-all"
-              style={{ fontFamily: "var(--font-display)", letterSpacing: "0.1em" }}
-            >
-              GET EARLY ACCESS →
-            </button>
-          </div>
+
         </div>
       </section>
 
-      {/* GET STARTED FORM */}
-      <section id="claim" className="py-28 border-t border-[rgba(16,185,129,0.1)]">
+      {/* ── JOIN TODAY ── */}
+      <section id="join" className="py-28 border-t border-[rgba(16,185,129,0.1)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <span className="text-[#10B981] text-xs tracking-[0.25em] uppercase" style={{ fontFamily: "var(--font-mono)" }}>
-              Get Started
+              Join Today
             </span>
-            <h2
-              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
-              className="mt-2 text-[#F0F5F0]"
-            >
-              REQUEST A QUOTE
+            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 5rem)" }} className="mt-2 text-[#F0F5F0]">
+              START YOUR REQUEST
             </h2>
             <p className="text-[#94A3B8] mt-4 text-base max-w-lg mx-auto leading-relaxed">
               Submit your requirements and a TASA specialist will respond within 24 hours with a tailored proposal — including EIAC and ISO certified lab options, turnaround times, and transparent platform pricing.
@@ -557,18 +587,14 @@ export default function Index() {
                 style={{ background: "linear-gradient(135deg, rgba(16,185,129,0.06), rgba(16,185,129,0.02))" }}>
                 <div className="w-16 h-16 border-2 border-[#10B981] rounded-full flex items-center justify-center mx-auto mb-6">
                   <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                    <path d="M6 14l6 6 10-12" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M6 14l6 6 10-12" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
-                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "2rem" }} className="text-[#10B981] mb-3">
-                  REQUEST RECEIVED
-                </h3>
+                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "2rem" }} className="text-[#10B981] mb-3">REQUEST RECEIVED</h3>
                 <p className="text-[#94A3B8] text-base leading-relaxed">
                   Thank you. A TASA specialist will review your requirements and respond within 24 hours with certified lab options and a tailored proposal.
                 </p>
-                <div className="mt-2 text-xs text-[#94A3B8]" style={{ fontFamily: "var(--font-mono)" }}>
-                  ● UNDER REVIEW
-                </div>
+                <div className="mt-2 text-xs text-[#94A3B8]" style={{ fontFamily: "var(--font-mono)" }}>● UNDER REVIEW</div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -584,12 +610,8 @@ export default function Index() {
                         {field.label} {field.required && <span className="text-[#10B981]">*</span>}
                       </label>
                       <input
-                        type={field.type}
-                        name={field.name}
-                        placeholder={field.placeholder}
-                        value={(formData as any)[field.name]}
-                        onChange={handleInput}
-                        required={field.required}
+                        type={field.type} name={field.name} placeholder={field.placeholder}
+                        value={(formData as any)[field.name]} onChange={handleInput} required={field.required}
                         className="w-full px-4 py-3 border border-[rgba(16,185,129,0.2)] text-[#F0F5F0] placeholder-[#475569] text-sm transition-all"
                         style={{ background: "#1E293B", fontFamily: "var(--font-body)" }}
                       />
@@ -601,18 +623,11 @@ export default function Index() {
                   <label className="block text-xs tracking-widest uppercase text-[#94A3B8] mb-2" style={{ fontFamily: "var(--font-mono)" }}>
                     Service Required <span className="text-[#10B981]">*</span>
                   </label>
-                  <select
-                    name="serviceType"
-                    value={formData.serviceType}
-                    onChange={handleInput}
-                    required
+                  <select name="serviceType" value={formData.serviceType} onChange={handleInput} required
                     className="w-full px-4 py-3 border border-[rgba(16,185,129,0.2)] text-[#F0F5F0] text-sm transition-all appearance-none"
-                    style={{ background: "#1E293B", fontFamily: "var(--font-body)" }}
-                  >
+                    style={{ background: "#1E293B", fontFamily: "var(--font-body)" }}>
                     <option value="" disabled>Select a service...</option>
-                    {SERVICE_OPTIONS.map((opt) => (
-                      <option key={opt} value={opt}>{opt}</option>
-                    ))}
+                    {SERVICE_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
                   </select>
                 </div>
 
@@ -628,13 +643,7 @@ export default function Index() {
                     onDrop={handleFileDrop}
                     onClick={() => fileInputRef.current?.click()}
                   >
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                      onChange={handleFileSelect}
-                      className="hidden"
-                    />
+                    <input ref={fileInputRef} type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onChange={handleFileSelect} className="hidden" />
                     {invoiceFile ? (
                       <div className="flex items-center justify-center gap-3">
                         <div className="w-8 h-8 border border-[#10B981] flex items-center justify-center">
@@ -647,13 +656,7 @@ export default function Index() {
                           <div className="text-[#F0F5F0] text-sm">{invoiceFile.name}</div>
                           <div className="text-[#94A3B8] text-xs">{(invoiceFile.size / 1024).toFixed(1)} KB</div>
                         </div>
-                        <button
-                          type="button"
-                          onClick={(e) => { e.stopPropagation(); setInvoiceFile(null); }}
-                          className="ml-4 text-[#94A3B8] hover:text-[#FF4C4C] transition-colors text-lg leading-none"
-                        >
-                          ×
-                        </button>
+                        <button type="button" onClick={(e) => { e.stopPropagation(); setInvoiceFile(null); }} className="ml-4 text-[#94A3B8] hover:text-[#FF4C4C] transition-colors text-lg leading-none">×</button>
                       </div>
                     ) : (
                       <div>
@@ -663,12 +666,8 @@ export default function Index() {
                             <path d="M2 17v1a2 2 0 002 2h14a2 2 0 002-2v-1" stroke="#10B981" strokeWidth="1.5" strokeLinecap="round"/>
                           </svg>
                         </div>
-                        <p className="text-[#94A3B8] text-sm mb-1">
-                          <span className="text-[#10B981]">Click to upload</span> or drag and drop
-                        </p>
-                        <p className="text-[#475569] text-xs" style={{ fontFamily: "var(--font-mono)" }}>
-                          PDF, JPG, PNG, DOC — max 10MB
-                        </p>
+                        <p className="text-[#94A3B8] text-sm mb-1"><span className="text-[#10B981]">Click to upload</span> or drag and drop</p>
+                        <p className="text-[#475569] text-xs" style={{ fontFamily: "var(--font-mono)" }}>PDF, JPG, PNG, DOC — max 10MB</p>
                       </div>
                     )}
                   </div>
@@ -678,32 +677,20 @@ export default function Index() {
                   <label className="block text-xs tracking-widest uppercase text-[#94A3B8] mb-2" style={{ fontFamily: "var(--font-mono)" }}>
                     Tell Us About Your Requirements <span className="text-[rgba(16,185,129,0.5)]">(Optional)</span>
                   </label>
-                  <textarea
-                    name="message"
-                    placeholder="Describe your products, testing scope, volumes, or any specific compliance or certification requirements..."
-                    value={formData.message}
-                    onChange={handleInput}
-                    rows={4}
+                  <textarea name="message" placeholder="Describe your products, testing scope, volumes, or any specific compliance or certification requirements..."
+                    value={formData.message} onChange={handleInput} rows={4}
                     className="w-full px-4 py-3 border border-[rgba(16,185,129,0.2)] text-[#F0F5F0] placeholder-[#475569] text-sm transition-all resize-none"
                     style={{ background: "#1E293B", fontFamily: "var(--font-body)" }}
                   />
                 </div>
 
-                {error && (
-                  <div className="border border-red-800 bg-red-950/30 px-4 py-3 text-red-400 text-sm">
-                    {error}
-                  </div>
-                )}
+                {error && <div className="border border-red-800 bg-red-950/30 px-4 py-3 text-red-400 text-sm">{error}</div>}
 
-                <button
-                  type="submit"
-                  disabled={submitting}
+                <button type="submit" disabled={submitting}
                   className="btn-primary w-full py-5 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ fontFamily: "var(--font-display)", fontSize: "1.2rem", letterSpacing: "0.15em" }}
-                >
+                  style={{ fontFamily: "var(--font-display)", fontSize: "1.2rem", letterSpacing: "0.15em" }}>
                   {submitting ? "SENDING..." : "SUBMIT REQUEST →"}
                 </button>
-
                 <p className="text-center text-[#475569] text-xs" style={{ fontFamily: "var(--font-mono)" }}>
                   We respond within 24 hours. Your information is kept strictly confidential.
                 </p>
@@ -713,74 +700,68 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ABOUT */}
-      <section className="py-24 border-t border-[rgba(16,185,129,0.1)] relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
-          style={{
-            backgroundImage: "repeating-linear-gradient(45deg, #10B981 0px, #10B981 1px, transparent 1px, transparent 40px)",
-          }}
-        />
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid md:grid-cols-3 gap-12 items-center">
-            <div className="md:col-span-2">
-              <span className="text-[#10B981] text-xs tracking-[0.25em] uppercase" style={{ fontFamily: "var(--font-mono)" }}>
-                About TASA
-              </span>
-              <h2
-                style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 5vw, 4rem)" }}
-                className="mt-2 text-[#F0F5F0] mb-6"
-              >
-                THE PLATFORM BEHIND YOUR FOOD SAFETY
-              </h2>
-              <p className="text-[#94A3B8] text-base leading-relaxed mb-4">
-                TASA is a <span className="text-[#F0F5F0]">Testing as a Service</span> platform that unifies food testing, calibration, risk analysis, and food safety management under one roof. We aggregate a vetted network of <span className="text-[#10B981]">EIAC and ISO certified labs</span> — giving food manufacturers, processors, and exporters a single, reliable system to manage all compliance needs without the complexity of multiple vendor relationships.
-              </p>
-              <p className="text-[#94A3B8] text-base leading-relaxed mb-6">
-                We go beyond test booking. TASA delivers risk analysis and food safety advisory to help you identify vulnerabilities before they lead to compliance failures, product recalls, or reputational damage. Think of us as your long-term food safety partner — always on, always certified.
-              </p>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  "EIAC & ISO certified lab partners only",
-                  "Consolidated reporting & certificates",
-                  "Risk analysis & food safety advisory",
-                  "Single invoice. Multiple services.",
-                ].map((point) => (
-                  <div key={point} className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#10B981] rounded-full mt-2 flex-shrink-0" />
-                    <span className="text-[#94A3B8] text-sm leading-relaxed">{point}</span>
+      {/* ── FAQs ── */}
+      <section id="faqs" className="py-28 border-t border-[rgba(16,185,129,0.1)] relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none opacity-[0.025]"
+          style={{ backgroundImage: "repeating-linear-gradient(45deg, #10B981 0px, #10B981 1px, transparent 1px, transparent 40px)" }} />
+
+        <div className="max-w-4xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-16">
+            <span className="text-[#10B981] text-xs tracking-[0.25em] uppercase" style={{ fontFamily: "var(--font-mono)" }}>
+              FAQs
+            </span>
+            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 6vw, 5rem)" }} className="mt-2 text-[#F0F5F0]">
+              COMMON QUESTIONS
+            </h2>
+            <p className="text-[#94A3B8] mt-4 text-base max-w-lg mx-auto leading-relaxed">
+              Everything you need to know before getting started.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            {FAQS.map((faq, i) => (
+              <div key={i}
+                className="border border-[rgba(16,185,129,0.12)] overflow-hidden transition-all duration-200"
+                style={{ background: openFaq === i ? "#1E293B" : "rgba(30,41,59,0.5)" }}>
+                <button
+                  className="w-full px-8 py-6 flex items-center justify-between text-left gap-4"
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                >
+                  <span style={{ fontFamily: "var(--font-display)", fontSize: "1.15rem", letterSpacing: "0.04em" }}
+                    className="text-[#F0F5F0]">
+                    {faq.q}
+                  </span>
+                  <span
+                    className="text-[#10B981] text-2xl flex-shrink-0 transition-transform duration-200"
+                    style={{ transform: openFaq === i ? "rotate(45deg)" : "rotate(0deg)" }}
+                  >
+                    +
+                  </span>
+                </button>
+                {openFaq === i && (
+                  <div className="px-8 pb-6 border-t border-[rgba(16,185,129,0.1)]">
+                    <p className="text-[#94A3B8] text-sm leading-relaxed pt-4">{faq.a}</p>
                   </div>
-                ))}
+                )}
               </div>
-            </div>
-            <div className="glow-border border border-[rgba(16,185,129,0.12)] p-8 text-center"
-              style={{ background: "#1E293B" }}>
-              <div className="flex items-center justify-center gap-3 mb-2">
-                <svg width="44" height="44" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M18 2L32 10V26L18 34L4 26V10L18 2Z" fill="#0F172A" stroke="#10B981" strokeWidth="1.5"/>
-                  <path d="M10 10L26 26" stroke="rgba(16,185,129,0.2)" strokeWidth="0.8" strokeLinecap="round"/>
-                  <path d="M10 13H26" stroke="#10B981" strokeWidth="2.2" strokeLinecap="round"/>
-                  <path d="M18 13V25" stroke="#10B981" strokeWidth="2.2" strokeLinecap="round"/>
-                  <circle cx="10" cy="13" r="1.5" fill="#10B981"/>
-                  <circle cx="26" cy="13" r="1.5" fill="#10B981"/>
-                  <circle cx="18" cy="25" r="1.5" fill="#10B981"/>
-                  <circle cx="18" cy="13" r="0.8" fill="#0F172A"/>
-                </svg>
-                <span style={{ fontFamily: "var(--font-display)", fontSize: "3rem", color: "#10B981", lineHeight: 1 }}>TASA</span>
-              </div>
-              <div className="section-divider my-4" />
-              <p className="text-[#94A3B8] text-sm leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
-                EIAC & ISO Certified Labs.<br />One Platform. Full Compliance.<br />Stronger Food Safety.
-              </p>
-            </div>
+            ))}
+          </div>
+
+          <div className="mt-12 text-center">
+            <p className="text-[#64748B] text-sm mb-4">Still have questions?</p>
+            <button onClick={scrollToForm} className="btn-primary px-8 py-3 text-sm"
+              style={{ fontFamily: "var(--font-display)", letterSpacing: "0.12em" }}>
+              CONTACT US →
+            </button>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
+      {/* ── FOOTER ── */}
       <footer className="border-t border-[rgba(16,185,129,0.1)] py-10">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
-            <svg width="22" height="22" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="22" height="22" viewBox="0 0 36 36" fill="none">
               <path d="M18 2L32 10V26L18 34L4 26V10L18 2Z" fill="#0F172A" stroke="#10B981" strokeWidth="1.5"/>
               <path d="M10 10L26 26" stroke="rgba(16,185,129,0.2)" strokeWidth="0.8" strokeLinecap="round"/>
               <path d="M10 13H26" stroke="#10B981" strokeWidth="2.2" strokeLinecap="round"/>
@@ -790,21 +771,19 @@ export default function Index() {
               <circle cx="18" cy="25" r="1.5" fill="#10B981"/>
               <circle cx="18" cy="13" r="0.8" fill="#0F172A"/>
             </svg>
-            <span style={{ fontFamily: "var(--font-display)" }} className="text-[#94A3B8] tracking-widest">
-              TASA
-            </span>
+            <span style={{ fontFamily: "var(--font-display)" }} className="text-[#94A3B8] tracking-widest">TASA</span>
           </div>
           <p className="text-[#475569] text-xs" style={{ fontFamily: "var(--font-mono)" }}>
-            © {new Date().getFullYear()} TASA. All rights reserved. | Testing as a Service — EIAC & ISO Certified Labs
+            © {new Date().getFullYear()} TASA. All rights reserved. | Simplifying Testing. Strengthening Safety.
           </p>
           <div className="flex gap-6 text-xs text-[#475569]" style={{ fontFamily: "var(--font-mono)" }}>
-            <a href="#services" className="hover:text-[#10B981] transition-colors">Services</a>
-            <a href="#platform" className="hover:text-[#10B981] transition-colors">Platform</a>
-            <a href="#dashboard" className="hover:text-[#10B981] transition-colors">Dashboard</a>
-            <a href="#claim" className="hover:text-[#10B981] transition-colors">Get Started</a>
+            <a href="#what-we-do" className="hover:text-[#10B981] transition-colors">What We Do</a>
+            <a href="#how-it-works" className="hover:text-[#10B981] transition-colors">How It Works</a>
+            <a href="#platform" className="hover:text-[#10B981] transition-colors">TASA Advantage</a>
           </div>
         </div>
       </footer>
+
     </div>
   );
 }
